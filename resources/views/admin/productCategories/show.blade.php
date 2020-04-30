@@ -56,7 +56,7 @@
                             {{ trans('cruds.productCategory.fields.category') }}
                         </th>
                         <td>
-                            {{ $productCategory->category->name ?? '' }}
+                            {{ $productCategory->parentCategory->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

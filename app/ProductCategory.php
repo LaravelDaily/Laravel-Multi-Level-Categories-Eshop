@@ -61,9 +61,15 @@ class ProductCategory extends Model implements HasMedia
 
     }
 
-    public function category()
+    public function parentCategory()
     {
         return $this->belongsTo(ProductCategory::class, 'category_id');
+
+    }
+
+    public function childCategories()
+    {
+        return $this->hasMany(ProductCategory::class, 'category_id');
 
     }
 

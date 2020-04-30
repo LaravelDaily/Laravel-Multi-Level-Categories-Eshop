@@ -31,7 +31,9 @@ class ProductCategoryController extends Controller
     {
         abort_if(Gate::denies('product_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = ProductCategory::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = ProductCategory::whereNull('category_id')
+            ->with('childCategories')
+            ->get();
 
         return view('admin.productCategories.create', compact('categories'));
     }
@@ -56,9 +58,11 @@ class ProductCategoryController extends Controller
     {
         abort_if(Gate::denies('product_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = ProductCategory::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $categories = ProductCategory::whereNull('category_id')
+            ->with('childCategories')
+            ->get();
 
-        $productCategory->load('category');
+        $productCategory->load('parentCategory');
 
         return view('admin.productCategories.edit', compact('categories', 'productCategory'));
     }
@@ -84,7 +88,7 @@ class ProductCategoryController extends Controller
     {
         abort_if(Gate::denies('product_category_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $productCategory->load('category');
+        $productCategory->load('parentCategory');
 
         return view('admin.productCategories.show', compact('productCategory'));
     }

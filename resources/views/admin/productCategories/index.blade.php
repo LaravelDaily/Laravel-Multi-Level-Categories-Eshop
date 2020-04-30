@@ -68,7 +68,7 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $productCategory->category->name ?? '' }}
+                                {{ $productCategory->parentCategory->name ?? '' }}
                             </td>
                             <td>
                                 {{ $productCategory->slug ?? '' }}

@@ -44,8 +44,19 @@
             <div class="form-group">
                 <label for="category_id">{{ trans('cruds.productCategory.fields.category') }}</label>
                 <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id">
-                    @foreach($categories as $id => $category)
-                        <option value="{{ $id }}" {{ ($productCategory->category ? $productCategory->category->id : old('category_id')) == $id ? 'selected' : '' }}>{{ $category }}</option>
+                    <option value="">{{ trans('global.pleaseSelect') }}</option>
+                    @foreach($categories as $category)
+                        @if($productCategory->id !== $category->id)
+                            <option value="{{ $category->id }}" {{ old('category_id', $productCategory->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @foreach($category->childCategories as $childCategory)
+                                @if($productCategory->id !== $childCategory->id)
+                                    <option
+                                        value="{{ $childCategory->id }}"
+                                        {{ old('category_id', $productCategory->category_id) == $childCategory->id ? 'selected' : '' }}
+                                    >-- {{ $childCategory->name }}</option>
+                                @endif
+                            @endforeach
+                        @endif
                     @endforeach
                 </select>
                 @if($errors->has('category'))
