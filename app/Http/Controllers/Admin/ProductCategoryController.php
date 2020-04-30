@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyProductCategoryRequest;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
 use App\ProductCategory;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
@@ -116,6 +117,14 @@ class ProductCategoryController extends Controller
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(ProductCategory::class, 'slug', $request->name);
+
+        return response()->json(['slug' => $slug]);
 
     }
 

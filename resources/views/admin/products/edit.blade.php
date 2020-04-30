@@ -164,5 +164,14 @@
         return _results
     }
 }
+
+$('#name').change(function(e) {
+    $.get('{{ route('admin.products.checkSlug') }}',
+        { 'name': $(this).val() },
+        function( data ) {
+            $('#slug').val(data.slug);
+        }
+    );
+});
 </script>
 @endsection

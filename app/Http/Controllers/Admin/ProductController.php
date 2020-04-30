@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Product;
 use App\ProductCategory;
 use App\ProductTag;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
@@ -126,6 +127,14 @@ class ProductController extends Controller
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(Product::class, 'slug', $request->name);
+
+        return response()->json(['slug' => $slug]);
 
     }
 
