@@ -22,7 +22,9 @@ class ProductCategoryController extends Controller
     {
         abort_if(Gate::denies('product_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $productCategories = ProductCategory::all();
+        $productCategories = ProductCategory::whereNull('category_id')
+            ->with('childCategories.childCategories')
+            ->get();
 
         return view('admin.productCategories.index', compact('productCategories'));
     }
