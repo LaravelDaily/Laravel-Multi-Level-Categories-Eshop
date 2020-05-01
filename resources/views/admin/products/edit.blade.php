@@ -47,14 +47,8 @@
                     <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
                 </div>
                 <select class="form-control select2 {{ $errors->has('categories') ? 'is-invalid' : '' }}" name="categories[]" id="categories" multiple>
-                    @foreach($categories as $parentCategory)
-                        @foreach($parentCategory->childCategories as $category)
-                            <optgroup label="{{ $parentCategory->name }} -> {{ $category->name }}">
-                                @foreach($category->childCategories as $childCategory)
-                                    <option value="{{ $childCategory->id }}" {{ (in_array($childCategory->id, old('categories', [])) || $product->categories->contains($childCategory->id)) ? 'selected' : '' }}>{{ $childCategory->name }}</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ (in_array($category->id, old('categories', [])) || $product->categories->contains($category->id)) ? 'selected' : '' }}>{{ $category->parentCategory->parentCategory->name }} / {{ $category->parentCategory->name }} / {{ $category->name }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('categories'))
