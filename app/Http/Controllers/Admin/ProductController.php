@@ -33,7 +33,9 @@ class ProductController extends Controller
     {
         abort_if(Gate::denies('product_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = ProductCategory::all()->pluck('name', 'id');
+        $categories = ProductCategory::whereNull('category_id')
+            ->with('childCategories.childCategories')
+            ->get();
 
         $tags = ProductTag::all()->pluck('name', 'id');
 
@@ -62,7 +64,9 @@ class ProductController extends Controller
     {
         abort_if(Gate::denies('product_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $categories = ProductCategory::all()->pluck('name', 'id');
+        $categories = ProductCategory::whereNull('category_id')
+            ->with('childCategories.childCategories')
+            ->get();
 
         $tags = ProductTag::all()->pluck('name', 'id');
 
