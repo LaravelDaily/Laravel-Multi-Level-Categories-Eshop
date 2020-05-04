@@ -10,7 +10,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::inRandomOrder()->take(9)->get();
+        $products = Product::with('categories.parentCategory.parentCategory')
+            ->inRandomOrder()
+            ->take(9)
+            ->get();
 
         return view('index', compact('products'));
     }
@@ -41,8 +44,29 @@ class HomeController extends Controller
         $products = Product::whereHas('categories', function ($query) use ($ids) {
                 $query->whereIn('id', $ids);
             })
+            ->with('categories.parentCategory.parentCategory')
             ->paginate(9);
 
         return view('index', compact('products', 'selectedCategories'));
+    }
+
+    public function product($category, $childCategory, $childCategory2, $productSlug, Product $product)
+    {
+        $product->load('categories.parentCategory.parentCategory');
+        $childCategory2 = $product->categories->where('slug', $childCategory2)->first();
+        $selectedCategories = [];
+
+        if ($childCategory2 &&
+            $childCategory2->parentCategory &&
+            $childCategory2->parentCategory->parentCategory
+        ) {
+            $selectedCategories = [
+                $childCategory2->parentCategory->parentCategory->id ?? null,
+                $childCategory2->parentCategory->id ?? null,
+                $childCategory2->id
+            ];
+        }
+
+        return view('product', compact('product', 'selectedCategories'));
     }
 }
