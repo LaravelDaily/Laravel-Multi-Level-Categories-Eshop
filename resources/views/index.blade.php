@@ -19,4 +19,11 @@
   @endforeach
 
 </div>
+
+@if(get_class($products) == 'Illuminate\Pagination\LengthAwarePaginator')
+  <div class="row">
+    {{ $products->links() ?? '' }}
+  </div>
+@endif
+
 @endsection

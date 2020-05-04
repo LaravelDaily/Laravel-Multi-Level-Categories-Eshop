@@ -54,3 +54,5 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
     }
 
 });
+
+Route::get('/{category:slug}/{childCategory:slug?}/{childCategory2?}', 'HomeController@category')->name('category');

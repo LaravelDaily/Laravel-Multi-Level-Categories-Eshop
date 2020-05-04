@@ -22,3 +22,7 @@ body {
 .list-third-level .list-group-item {
     padding-left: 3rem;
 }
+
+.list-group li.active a {
+    color: #fff;
+}

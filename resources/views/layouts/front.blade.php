@@ -22,7 +22,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">{{ trans('panel.site_title') }}</a>
+      <a class="navbar-brand" href="{{ route('index') }}">{{ trans('panel.site_title') }}</a>
     </div>
   </nav>
 
@@ -36,15 +36,27 @@
         <h1 class="my-4">{{ trans('panel.site_title') }}</h1>
         <ul class="list-group" id="categories">
           @foreach($frontCategories as $parentCategory)
-            <li class="list-group-item" data-id="{{ $parentCategory->id }}"><i class="fa fa-arrow-right"></i> <a href="">{{ $parentCategory->name }} ({{ $parentCategory->products_count }})</a></li>
+            <li class="list-group-item" data-id="{{ $parentCategory->id }}">
+              <i class="fa fa-arrow-right"></i>
+              <a href="{{ route('category', [$parentCategory]) }}">{{ $parentCategory->name }} ({{ $parentCategory->products_count }})</a>
+            </li>
             @if($parentCategory->childCategories->count())
               <div class="list-second-level" data-id="{{ $parentCategory->id }}" style="display:none;">
                 @foreach($parentCategory->childCategories as $category)
-                  <li class="list-group-item" data-id="{{ $category->id }}"><i class="fa fa-arrow-right"></i> <a href="">{{ $category->name }} ({{ $category->products_count }})</a></li>
+                  <li class="list-group-item" data-id="{{ $category->id }}">
+                    <i class="fa fa-arrow-right"></i>
+                    <a href="{{ route('category', [$parentCategory, $category]) }}">{{ $category->name }} ({{ $category->products_count }})</a>
+                  </li>
                   @if($category->childCategories->count())
                     <div class="list-third-level" data-id="{{ $category->id }}" style="display:none;">
                       @foreach($category->childCategories as $childCategory)
-                        <a href="" class="list-group-item{{ $loop->last ? ' mb-1' : '' }}">{{ $childCategory->name }} ({{ $childCategory->products_count }})</a>
+                        <a
+                          href="{{ route('category', [$parentCategory, $category, $childCategory->slug]) }}"
+                          class="list-group-item{{ $loop->last ? ' mb-1' : '' }}"
+                          data-id="{{ $childCategory->id }}"
+                        >
+                          {{ $childCategory->name }} ({{ $childCategory->products_count }})
+                        </a>
                       @endforeach
                   </div>
                   @endif
@@ -93,6 +105,17 @@
         $this.children('i').toggleClass('fa-arrow-right').toggleClass('fa-arrow-down');
         $this.siblings('div[data-id="' + id + '"]').toggle();
       });
+
+      @if(isset($selectedCategories))
+        @foreach($selectedCategories as $selected)
+          @if($loop->index < 2)
+            $('#categories .list-group-item[data-id="{{ $selected }}"]').click();
+          @endif
+          @if($loop->last)
+            $('#categories .list-group-item[data-id="{{ $selected }}"]').toggleClass('active');
+          @endif
+        @endforeach
+      @endif
     });
   </script>
 </body>
