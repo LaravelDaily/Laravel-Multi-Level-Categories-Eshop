@@ -6,3 +6,19 @@
 body {
   padding-top: 56px;
 }
+
+.list-group .list-group-item {
+    padding-left: .75rem;
+}
+
+.list-group .list-group-item i {
+    margin-right: .25rem;
+}
+
+.list-second-level .list-group-item {
+    padding-left: 1.5rem;
+}
+
+.list-third-level .list-group-item {
+    padding-left: 3rem;
+}

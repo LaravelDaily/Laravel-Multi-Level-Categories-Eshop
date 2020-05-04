@@ -73,6 +73,12 @@ class ProductCategory extends Model implements HasMedia
 
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+
+    }
+
     public function sluggable()
     {
         return [
